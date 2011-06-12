@@ -21,8 +21,6 @@ void VGA_class::printchar(unsigned int x, unsigned int y, unsigned char c, bool 
 			/* Check bounds */
 			if (rx>=0 && rx<(int)getHSize() && ry>=0 &&  ry<(int)getVSize()) {
 				rx = rx + ry * (int)getHSize();
-
-
 				if (v&0x80) {
 					vmem[rx] = fg;
 				} else {
@@ -34,6 +32,11 @@ void VGA_class::printchar(unsigned int x, unsigned int y, unsigned char c, bool 
 		}
 		vchar++;
 	}
+}
+
+void VGA_class::clearArea(unsigned x, unsigned y, unsigned width, unsigned height)
+{
+	drawRect(x,y,width,height);
 }
 
 void VGA_class::drawRect(unsigned x, unsigned y, unsigned width, unsigned height)
@@ -81,6 +84,33 @@ void VGA_class::writeArea(int x, int y, int width, int height, pixel_t *source)
 			*vmem++ = *source++;
 		}
 		vmem+=getHSize()-width;
+	}
+}
+void VGA_class::moveArea(unsigned x, unsigned y, unsigned width, unsigned height, unsigned tx, unsigned ty)
+{
+	vgaptr_t vsource = getBasePointer(x,y);
+	vgaptr_t vtarget = getBasePointer(tx,ty);
+	unsigned w;
+
+	if (vtarget>vsource) {
+		vsource += ((height-1) * VGA.getHSize()) + width-1;
+		vtarget += ((height-1) * VGA.getHSize()) + width-1;
+
+		while (height--) {
+			for (w=0;w<width;w++) {
+				*vtarget-- = *vsource--;
+			}
+			vsource-=getHSize()-width;
+			vtarget-=getHSize()-width;
+		}
+	} else {
+		while (height--) {
+			for (w=0;w<width;w++) {
+				*vtarget++ = *vsource++;
+			}
+			vsource+=getHSize()-width;
+			vtarget+=getHSize()-width;
+		}
 	}
 }
 

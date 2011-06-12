@@ -107,14 +107,23 @@ public:
 
 	void clear();
 
+	void moveArea(unsigned x, unsigned y, unsigned width, unsigned height, unsigned tx, unsigned ty);
+
+
+
 protected:
+
 	pixel_t fg,bg;
 };
 
 const VGA_class::pixel_t RED = 0xE0;
 const VGA_class::pixel_t GREEN = 0x1C;
 const VGA_class::pixel_t BLUE = 0x03;
-
+const VGA_class::pixel_t YELLOW = (RED|GREEN);
+const VGA_class::pixel_t PURPLE = (RED|BLUE);
+const VGA_class::pixel_t CYAN = (GREEN|BLUE);
+const VGA_class::pixel_t WHITE = 0xff;
+const VGA_class::pixel_t BLACK = 0x00;
 extern VGA_class VGA;
 
 #endif

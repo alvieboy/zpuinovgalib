@@ -19,10 +19,20 @@ public:
 		return me.mread(x);
 	}
 
+	bool operator>(const MemProxy&b) {
+		return x > b.x;
+	}
+
 	MemProxy &operator+=(int v)
 	{
 		x+=v;
-        return *this;
+		return *this;
+	}
+
+	MemProxy &operator-=(int v)
+	{
+		x-=v;
+		return *this;
 	}
 
 	MemProxy operator+(int v) {
@@ -39,9 +49,10 @@ public:
 		return copy;
 	}
 
-	MemProxy &operator--(int v) {
+	MemProxy operator--(int v) {
+		MemProxy copy(*this);
 		x--;
-		return *this;
+		return copy;
 	}
 	MemProxy &operator=(int v) {
 		me.mwrite(x,v);
